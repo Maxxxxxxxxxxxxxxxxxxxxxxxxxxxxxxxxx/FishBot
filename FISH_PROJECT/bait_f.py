@@ -86,13 +86,33 @@ def callback_query_bait(call):
         "Magnet": 500
     }
 
-    # Если наживка уже выбрана и есть в инвентаре
-    if button_id == selected_bait.get(user_id, "Empty") and user_bait_data[user_id].get(button_id, 0) > 0:
-        selected_bait[user_id] = "Empty"
-    else:
-        # Проверяем наличие денег или наживки в инвентаре
-        if user_bait_data[user_id].get(button_id, 0) > 0:
+    current_bait = selected_bait.get(user_id, "Empty")
+    has_money = user_money.get(user_id, 0) >= price_map.get(button_id, 0)
+    has_bait_in_inventory = user_bait_data[user_id].get(button_id, 0) > 0
+    is_current_bait = current_bait == button_id
+
+    # Случай 1: денег нет, текущая наживка empty
+    if not has_money and current_bait == "Empty":
+        # Случай 5: проверяем есть ли наживка в инвентаре
+        if has_bait_in_inventory:
             selected_bait[user_id] = button_id
+        else:
+            bot.answer_callback_query(call.id, text="You don't have enough money(", show_alert=False)
+            return
+
+    # Случай 2: деньги есть, текущая наживка empty
+    elif has_money and current_bait == "Empty":
+        user_money[user_id] -= price_map[button_id]
+        selected_bait[user_id] = button_id
+        user_bait_data[user_id][button_id] = user_bait_data[user_id].get(button_id, 0) + 20
+        save_money_data(user_money)
+        save_bait_data(user_bait_data)
+
+    # Случай 3: деньги есть, текущая наживка не empty
+    elif has_money and current_bait != "Empty":
+        if is_current_bait:
+            # Убираем текущую наживку
+            selected_bait[user_id] = "Empty"
         else:
             price = price_map.get(button_id, 0)
             if user_money.get(user_id, 0) >= price:
