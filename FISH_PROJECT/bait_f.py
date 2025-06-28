@@ -22,15 +22,29 @@ def save_state_bait(selected_bait):
     with open(SAVE_FILE_BAIT, 'w', encoding='utf-8') as z:
         json.dump(selected_bait, z, ensure_ascii=False, indent=4)
 
-def create_markup_bait(user_selected_bait):
+
+def create_markup_bait(user_selected_bait, user_bait_data, user_id):
     markup = types.InlineKeyboardMarkup(row_width=1)
+
+    # Получаем количество каждой наживки
+    worms_count = user_bait_data.get(user_id, {}).get('Worms', 0)
+    leeches_count = user_bait_data.get(user_id, {}).get('Leeches', 0)
+    magnet_count = user_bait_data.get(user_id, {}).get('Magnet', 0)
+
+    # Создаем кнопки с отображением количества
     buttons = [
-        types.InlineKeyboardButton(f"{'✅ ' if user_selected_bait == 'Worms' else '80$ '}Worms 🐛 x20",
-                                 callback_data="Worms"),
-        types.InlineKeyboardButton(f"{'✅ ' if user_selected_bait == 'Leeches' else '500$ '}Leeches 🦐 x20",
-                                 callback_data="Leeches"),
-        types.InlineKeyboardButton(f"{'✅ ' if user_selected_bait == 'Magnet' else '500$ '}Magnet 🧲 x20",
-                                 callback_data="Magnet"),
+        types.InlineKeyboardButton(
+            f"{'✅ ' if user_selected_bait == 'Worms' else '80$ '}Worms 🐛 x{worms_count}",
+            callback_data="Worms"
+        ),
+        types.InlineKeyboardButton(
+            f"{'✅ ' if user_selected_bait == 'Leeches' else '500$ '}Leeches 🦐 x{leeches_count}",
+            callback_data="Leeches"
+        ),
+        types.InlineKeyboardButton(
+            f"{'✅ ' if user_selected_bait == 'Magnet' else '500$ '}Magnet 🧲 x{magnet_count}",
+            callback_data="Magnet"
+        ),
         types.InlineKeyboardButton("back", callback_data='button_shop')
     ]
     markup.add(*buttons)
@@ -39,13 +53,14 @@ def create_markup_bait(user_selected_bait):
 def bait_func(chat_id, inline_message_id=None, message_id=None):
     user_id = str(chat_id)
     selected_bait = load_bait_select()
+    user_bait_data = load_bait_data()
 
     if user_id not in selected_bait:
         selected_bait[user_id] = "Empty"
         save_state_bait(selected_bait)
 
     current_bait = selected_bait.get(user_id, "Empty")
-    markup = create_markup_bait(current_bait)
+    markup = create_markup_bait(current_bait,user_bait_data,user_id)
 
     if inline_message_id:  # Inline режим
         try:
@@ -70,6 +85,7 @@ def bait_func(chat_id, inline_message_id=None, message_id=None):
     else:  # Обычный режим (новое сообщение)
         bot.send_message(chat_id, "Choose fishing bait:", reply_markup=markup)
 
+
 def callback_query_bait(call):
     user_id = str(call.from_user.id)
     button_id = call.data
@@ -79,6 +95,12 @@ def callback_query_bait(call):
 
     if user_id not in selected_bait:
         selected_bait[user_id] = "Empty"
+
+    if user_id not in user_bait_data:
+        user_bait_data[user_id] = {}
+
+    if user_id not in user_money:
+        user_money[user_id] = 0
 
     price_map = {
         "Worms": 80,
@@ -114,19 +136,25 @@ def callback_query_bait(call):
             # Убираем текущую наживку
             selected_bait[user_id] = "Empty"
         else:
-            price = price_map.get(button_id, 0)
-            if user_money.get(user_id, 0) >= price:
-                user_money[user_id] -= price
-                selected_bait[user_id] = button_id
-                user_bait_data[user_id][button_id] = user_bait_data[user_id].get(button_id, 0) + 20
-                save_money_data(user_money)
-            else:
-                bot.answer_callback_query(call.id, text="You don't have enough money(", show_alert=False)
-                return
+            # Покупаем новую наживку и делаем текущей
+            user_money[user_id] -= price_map[button_id]
+            selected_bait[user_id] = button_id
+            user_bait_data[user_id][button_id] = user_bait_data[user_id].get(button_id, 0) + 20
+            save_money_data(user_money)
+            save_bait_data(user_bait_data)
+
+    # Случай 4: денег нет, текущая наживка не empty
+    elif not has_money and current_bait != "Empty":
+        if is_current_bait:
+            # Убираем текущую наживку
+            selected_bait[user_id] = "Empty"
+        else:
+            # Не хватает денег на покупку другой наживки
+            bot.answer_callback_query(call.id, text="You don't have enough money(", show_alert=False)
+            return
 
     save_state_bait(selected_bait)
-    save_bait_data(user_bait_data)
-    updated_markup = create_markup_bait(selected_bait.get(user_id, "Empty"))
+    updated_markup = create_markup_bait(selected_bait.get(user_id, "Empty"),user_bait_data,user_id)
 
     try:
         if hasattr(call, 'inline_message_id'):  # Inline режим

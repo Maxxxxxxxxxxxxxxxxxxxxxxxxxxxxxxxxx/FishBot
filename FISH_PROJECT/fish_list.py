@@ -13,8 +13,8 @@ fish = ("карп", "лосось", "тунец", "щука", "окунь", "с�
 
 RiverT1 = ("1 1 Fish_🐟", "3 2 Salmon_🐟")
 RiverT2 = ("1 1 Fish_🐟", "3 2 Salmon_🐟","10 5 Cod_🦈")
-RiverT3 = ("3 2 Salmon_🐟","10 5 Cod_🦈","50 10 Tropical_Fish_🐠")
-RiverT4 = ("10 5 Cod_🦈","50 10 Tropical_Fish_🐠","150 25 Pufferfish_🐡")
+RiverT3 = ("3 2 Salmon_🐟","10 5 Cod_🦈","40 10 Tropical_Fish_🐠")
+RiverT4 = ("10 5 Cod_🦈","40 10 Tropical_Fish_🐠","150 25 Pufferfish_🐡")
 
 RiverTT1 = ("1 1 Fish_🐟")
 RiverTT2 = ("3 2 Salmon_🐟")
@@ -24,7 +24,7 @@ RiverTT4 = ("10 5 Cod_🦈")
 RiverTTT1 = ("1 1 Fish_🐟")
 RiverTTT2 = ("1 1 Fish_🐟", "3 2 Salmon_🐟")
 RiverTTT3 = ("3 2 Salmon_🐟","10 5 Cod_🦈")
-RiverTTT4 = ("10 5 Cod_🦈","50 10 Tropical_Fish_🐠")
+RiverTTT4 = ("10 5 Cod_🦈","40 10 Tropical_Fish_🐠")
 
 ChestT1 = ("10 10 Uncommon_chest💎")
 ChestT2 = ("50 50 Common_chest💎")
@@ -32,13 +32,14 @@ ChestT3 = ("500 50 Rare_chest💎")
 ChestT4 = ("1000 100 Epic_chest💎")
 ChestT5 = ("2000 200 Legendary_chest👑")
 
+
 T1 = (RiverT1,RiverTT1,RiverTTT1)
 T2 = (RiverT2,RiverTT2,RiverTTT2)
 T3 = (RiverT3,RiverTT3,RiverTTT3)
 T4 = (RiverT4,RiverTT4,RiverTTT4)
 
-a = ("1 1 Fish_🐟", "3 2 Salmon_🐟","10 5 Cod_🦈", "50 10 Tropical_Fish_🐠","150 25 Pufferfish_🐡")
-LavaT1 = ("250 50 Fiery_Puffer_🔥🐡","500 100 hot_cod_🔥🦈")
-LavaT2 = (" "," ")
+a = ("1 1 Fish_🐟", "3 2 Salmon_🐟","10 5 Cod_🦈", "40 10 Tropical_Fish_🐠","150 25 Pufferfish_🐡")
+LavaT1 = ("250 50 Fiery_Puffer_🔥🐡","400 100 hot_cod_🔥🦈")
+LavaT2 = ("250 50 Fiery_Puffer_🔥🐡")
 LavaT3 = (" "," ")
-
+LT1 = (LavaT1,LavaT2)
