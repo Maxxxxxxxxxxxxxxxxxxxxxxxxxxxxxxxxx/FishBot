@@ -734,6 +734,11 @@ def fish_menu(call):
     current_time = time.time()
     user_id = str(call.from_user.id)
 
+    if user_id != "123":
+        return
+    else:
+        return
+
     if user_id in user_cooldowns:
         last_request_time = user_cooldowns[user_id]
         if current_time - last_request_time < 3:
