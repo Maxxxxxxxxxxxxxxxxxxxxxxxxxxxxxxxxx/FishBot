@@ -1,3 +1,4 @@
+
 from telebot import util
 import telebot
 import os
@@ -32,7 +33,7 @@ user_bets = {}
 user_xp = load_xp_data()
 selected_bait = bait_f.load_bait_select()
 inline_sessions = {}
-kazik_history_file = os.path.join('json', "kazik_history.json")  # Файл для истории баланса
+kazik_history_file = os.path.join(os.path.dirname(__file__), 'json', "kazik_history.json")  # Файл для истории баланса
 
 # Инициализация бота
 token = secret.get('BOT_API_TOKEN')
