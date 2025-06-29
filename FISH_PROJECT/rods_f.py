@@ -2,8 +2,8 @@
 # # from telebot import types
 # # import json
 # # import os
-# # from secrets import secrets
-# # from logic_json import *
+# # from FISH_PROJECT.config import secrets
+# # from FISH_PROJECT.logic_json import *
 # #
 # # token = secrets.get('BOT_API_TOKEN')
 # # bot = telebot.TeleBot(token)
@@ -166,8 +166,8 @@
 # from telebot import types
 # import json
 # import os
-# from secrets import secrets
-# from logic_json import *
+# from FISH_PROJECT.config import secrets
+# from FISH_PROJECT.logic_json import *
 #
 # token = secrets.get('BOT_API_TOKEN')
 # bot = telebot.TeleBot(token)
@@ -301,20 +301,18 @@
 #     if not rods_type or rods_type == "Empty":
 #         return 1
 #     return int(rods_type[-1]) if rods_type[-1].isdigit() else 1
-
-
 import telebot
 from telebot import types
 import json
 import os
-from secrets import secrets
-from logic_json import *
+from FISH_PROJECT.config import secret
+from FISH_PROJECT.logic_json import *
 
-token = secrets.get('BOT_API_TOKEN')
+token = secret.get('BOT_API_TOKEN')
 bot = telebot.TeleBot(token)
 
 JSON_FOLDER = 'json'
-SAVE_FILE_RODS = os.path.join(JSON_FOLDER, 'selected_rods.json')
+SAVE_FILE_RODS = os.path.join(os.path.dirname(__file__), JSON_FOLDER, 'selected_rods.json')
 
 if os.path.exists(SAVE_FILE_RODS):
     with open(SAVE_FILE_RODS, 'r', encoding='utf-8') as f:

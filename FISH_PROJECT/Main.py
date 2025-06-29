@@ -6,13 +6,13 @@ import random
 import time
 import threading
 from FISH_PROJECT.rods_f import load_rods_select
-from secrets import secrets
+from FISH_PROJECT.config import secret
 from telebot import types
-from fish_list import *
-from logic_json import *
-import rods_f
-import bait_f
-import boat_f
+from FISH_PROJECT.fish_list import *
+from FISH_PROJECT.logic_json import *
+import FISH_PROJECT.rods_f as rods_f
+import FISH_PROJECT.bait_f as bait_f
+import FISH_PROJECT.boat_f as boat_f
 from telebot import apihelper
 import sys
 import select
@@ -35,7 +35,7 @@ inline_sessions = {}
 kazik_history_file = os.path.join('json', "kazik_history.json")  # Файл для истории баланса
 
 # Инициализация бота
-token = secrets.get('BOT_API_TOKEN')
+token = secret.get('BOT_API_TOKEN')
 bot = telebot.TeleBot(token)
 
 

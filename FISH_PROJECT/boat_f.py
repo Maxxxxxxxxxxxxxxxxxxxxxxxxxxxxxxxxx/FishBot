@@ -2,15 +2,15 @@ import telebot
 from telebot import types
 import json
 import os
-from secrets import secrets
-from logic_json import *
+from FISH_PROJECT.config import secret
+from FISH_PROJECT.logic_json import *
 
-token = secrets.get('BOT_API_TOKEN')
+token = secret.get('BOT_API_TOKEN')
 bot = telebot.TeleBot(token)
 
 # Путь к папке и файлу
 JSON_FOLDER = 'json'
-SAVE_FILE_BOAT = os.path.join(JSON_FOLDER, 'user_boat.json')
+SAVE_FILE_BOAT = os.path.join(os.path.dirname(__file__), JSON_FOLDER, 'user_boat.json')
 
 # Загрузка состояния из файла
 if os.path.exists(SAVE_FILE_BOAT):

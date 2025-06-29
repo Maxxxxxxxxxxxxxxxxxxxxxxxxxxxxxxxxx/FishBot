@@ -4,9 +4,9 @@ import json
 import random # для выбора случайного комплимента
 import time
 import threading
-from secrets import secrets
+from FISH_PROJECT.config import secret
 
-token = secrets.get('BOT_API_TOKEN')
+token = secret.get('BOT_API_TOKEN')
 bot = telebot.TeleBot(token)
 
 

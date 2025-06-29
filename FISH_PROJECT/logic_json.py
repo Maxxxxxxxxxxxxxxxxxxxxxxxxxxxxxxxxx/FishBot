@@ -1,9 +1,9 @@
 import os
 import json
-MONEY_FILE = os.path.join('json', 'user_money.json')
-XP_FILE = os.path.join('json','user_xp.json')
-BAIT_FILE = os.path.join('json','user_bait.json')
-BIOME_FILE = os.path.join('json','user_biome.json')
+MONEY_FILE = os.path.join(os.path.dirname(__file__), 'json', 'user_money.json')
+XP_FILE = os.path.join(os.path.dirname(__file__), 'json','user_xp.json')
+BAIT_FILE = os.path.join(os.path.dirname(__file__), 'json','user_bait.json')
+BIOME_FILE = os.path.join(os.path.dirname(__file__), 'json','user_biome.json')
 
 
 
