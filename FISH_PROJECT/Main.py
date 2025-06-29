@@ -678,25 +678,31 @@ def calculate_level(xp):
 
 def get_level_color(level):
     """Get color symbol based on level"""
-    colors = ['🟤', '🟣', '🔵', '🟢', '🟡', '🟠', '🔴', '⚪', '⚫']
+    colors = ['🟤', '🟣', '🔵', '🟢', '🟡', '🟠', '🔴', '⚪', '⚫','🔘','⭕','☢']
     if level < 10:
         return colors[0]
     elif level < 20:
         return colors[1]
-    elif level < 30:
+    elif level < 35:
         return colors[2]
-    elif level < 40:
-        return colors[3]
     elif level < 50:
-        return colors[4]
+        return colors[3]
     elif level < 75:
-        return colors[5]
+        return colors[4]
     elif level < 100:
+        return colors[5]
+    elif level < 150:
         return colors[6]
-    elif level < 120:
+    elif level < 200:
         return colors[7]
-    else:
+    elif level < 250:
         return colors[8]
+    elif level < 300:
+        return colors[9]
+    elif level < 400:
+        return colors[10]
+    elif level < 666:
+        return colors[11]
 
 
 def get_xp_for_next_level(current_level):
@@ -746,7 +752,7 @@ def fish_menu(call):
     bait_number = bait_f.get_bait_number(current_bait)
     boat_number = boat_f.get_boat_number(current_boat)
     fMAX = int(((rod_number ** 1.3) + (bait_number * 4) + random.choice([-1, -2, 1, 2, 3, 4, 5, 6, 3, 2, 3]) + (
-                boat_number * 20))+1//1.3)
+                boat_number * 40))+1//1.3)
 
     temp_money = 0
     temp_xp = 0
@@ -906,7 +912,9 @@ def fish_menu(call):
                 temp_xp += int(parts[1])
                 fish_list.append(parts[2])
                 fish_list = sorted(fish_list)
-    elif current_rod in ['rod6', 'rod7', 'rod8']:
+
+
+    elif current_rod in ['rod6']:
         temp_fishlist = random.choice(LT1)
         if isinstance(temp_fishlist, tuple):
             for _ in range(abs(fMAX - 5)):
@@ -918,6 +926,11 @@ def fish_menu(call):
             if bait_number == 2:
                 if random.randint(1, 100) <= 30:
                     CHparts = ChestT4.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+                if random.randint(1, 100) <= 20:
+                    CHparts = ChestT5.split()
                     temp_money += int(CHparts[0])
                     temp_xp += int(CHparts[1])
                     fish_list.append(CHparts[2])
@@ -953,6 +966,114 @@ def fish_menu(call):
                 temp_xp += int(CHparts[1])
                 fish_list.append(CHparts[2])
             fish_list = sorted(fish_list)
+
+
+    elif current_rod in ['rod7']:
+        temp_fishlist = random.choice(LT1)
+        if isinstance(temp_fishlist, tuple):
+            for _ in range(abs(fMAX + 5)):
+                temp_fish = random.choice(temp_fishlist)
+                parts = temp_fish.split()
+                temp_money += int(parts[0])
+                temp_xp += int(parts[1])
+                fish_list.append(parts[2])
+            if bait_number == 2:
+                if random.randint(1, 100) <= 40:
+                    CHparts = ChestT4.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+                if random.randint(1, 100) <= 20:
+                    CHparts = ChestT5.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+            if random.randint(1, 120) <= 10:
+                CHparts = ChestT5.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            if bait_number == 2:
+                if random.randint(1, 100) <= 50:
+                    CHparts = ChestT5.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+                fish_list = sorted(fish_list)
+            elif random.randint(1, 100) == 1:
+                CHparts = ChestT4.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            fish_list = sorted(fish_list)
+            fish_list = sorted(fish_list)
+        else:
+            for _ in range(abs(fMAX - 5)):
+                temp_fish = temp_fishlist
+                parts = temp_fish.split()
+                temp_money += int(parts[0])
+                temp_xp += int(parts[1])
+                fish_list.append(parts[2])
+            if random.randint(1, 100) <= 10:
+                CHparts = ChestT3.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            fish_list = sorted(fish_list)
+
+    elif current_rod in ['rod8']:
+        temp_fishlist = random.choice(LT1)
+        if isinstance(temp_fishlist, tuple):
+            for _ in range(abs(fMAX + 20)):
+                temp_fish = random.choice(temp_fishlist)
+                parts = temp_fish.split()
+                temp_money += int(parts[0])
+                temp_xp += int(parts[1])
+                fish_list.append(parts[2])
+            if bait_number == 2:
+                if random.randint(1, 100) <= 30:
+                    CHparts = ChestT4.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+                if random.randint(1, 100) <= 20:
+                    CHparts = ChestT5.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+            if random.randint(1, 120) <= 10:
+                CHparts = ChestT4.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            if bait_number == 2:
+                if random.randint(1, 100) <= 20:
+                    CHparts = ChestT5.split()
+                    temp_money += int(CHparts[0])
+                    temp_xp += int(CHparts[1])
+                    fish_list.append(CHparts[2])
+                fish_list = sorted(fish_list)
+            elif random.randint(1, 100) == 1:
+                CHparts = ChestT5.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            fish_list = sorted(fish_list)
+            fish_list = sorted(fish_list)
+        else:
+            for _ in range(abs(fMAX - 5)):
+                temp_fish = temp_fishlist
+                parts = temp_fish.split()
+                temp_money += int(parts[0])
+                temp_xp += int(parts[1])
+                fish_list.append(parts[2])
+            if random.randint(1, 100) <= 10:
+                CHparts = ChestT3.split()
+                temp_money += int(CHparts[0])
+                temp_xp += int(CHparts[1])
+                fish_list.append(CHparts[2])
+            fish_list = sorted(fish_list)
+
 
     user_money = load_money_data()
     user_xp = load_xp_data()
