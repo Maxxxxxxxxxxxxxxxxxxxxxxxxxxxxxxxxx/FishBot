@@ -1,4 +1,3 @@
-
 from telebot import util
 import telebot
 import os
@@ -310,7 +309,7 @@ def menu_button(chat_id, inline_message_id=None):
     user_xp = load_xp_data()
 
     # Получаем данные уровня
-    current_xp = user_xp.get(user_id, 0)
+    current_xp = user_xp[user_id]
     current_level = calculate_level(current_xp)
     color = get_level_color(current_level)
     next_level_xp = get_xp_for_next_level(current_level)
@@ -726,7 +725,6 @@ def create_progress_bar(progress):
 
 def fish_menu(call):
     global last_message_id
-    user_xp = load_xp_data()
     current_time = time.time()
     user_id = str(call.from_user.id)
 
@@ -1124,19 +1122,19 @@ def check_input():
                     user_rods_data = load_rods_select()
                     if user_id in user_rods_data:
                         del user_rods_data[user_id]
-                        rods_f.save_state_rods(user_bait_data)
+                        rods_f.save_state_rods(user_rods_data)
 
                     # Сброс выбранной удочки
                     selected_rods = rods_f.load_rods_select()
                     if user_id in selected_rods:
                         del selected_rods[user_id]
-                        rods_f.save_state_rods(selected_bait)
+                        rods_f.save_state_rods(selected_rods)
 
                     # Сброс лодки
                     user_boat_data = boat_f.load_boat_select()
                     if user_id in user_boat_data:
                         del user_boat_data[user_id]
-                        boat_f.save_state_boat(user_bait_data)
+                        boat_f.save_state_boat(user_boat_data)
 
 
                     print(f"✅ Все данные пользователя {user_id} успешно сброшены")
