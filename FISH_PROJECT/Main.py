@@ -151,77 +151,359 @@ def handle_stat_command(message):
     plt.close()
 
     # Создаем HTML-версию с улучшенной визуализацией
+    # Замените HTML-часть в вашем коде на эту версию:
+
+    # Замените HTML-часть в вашем коде на эту версию:
+
     html_content = f"""
     <html>
     <head>
         <title>История баланса Kazik Bank</title>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <style>
-            body {{ font-family: Arial, sans-serif; }}
-            .container {{ max-width: 1200px; margin: 0 auto; }}
-            .stats {{ margin-top: 20px; }}
-            .stats-table {{ width: 100%; border-collapse: collapse; }}
-            .stats-table th, .stats-table td {{ padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }}
-            .stats-table tr:hover {{ background-color: #f5f5f5; }}
+            body {{ 
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 10px;
+                background-color: #f8f9fa;
+            }}
+            .container {{ 
+                max-width: 95vw; 
+                width: 95vw;
+                margin: 0 auto;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                padding: 20px;
+                min-height: 90vh;
+            }}
+            .stats {{ 
+                margin-top: 30px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }}
+            .stat-card {{
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }}
+            .stat-value {{
+                font-size: 28px;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }}
+            .stat-label {{
+                font-size: 14px;
+                opacity: 0.9;
+            }}
+            #plot {{
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }}
+            h1 {{
+                text-align: center;
+                color: #2c3e50;
+                margin-bottom: 30px;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>История баланса Kazik Bank</h1>
+            <h1>📈 История баланса Kazik Bank</h1>
             <div id="plot"></div>
 
             <div class="stats">
-                <h2>Статистика</h2>
-                <table class="stats-table">
-                    <tr>
-                        <th>Текущий баланс:</th>
-                        <td>{current_balance}$</td>
-                    </tr>
-                    <tr>
-                        <th>Всего игр:</th>
-                        <td>{len(history)}</td>
-                    </tr>
-                    <tr>
-                        <th>Максимальный баланс:</th>
-                        <td>{max(balances) if balances else 0}$</td>
-                    </tr>
-                    <tr>
-                        <th>Минимальный баланс:</th>
-                        <td>{min(balances) if balances else 0}$</td>
-                    </tr>
-                    <tr>
-                        <th>Средний баланс:</th>
-                        <td>{sum(balances) / len(balances) if balances else 0:.2f}$</td>
-                    </tr>
-                </table>
+                <div class="stat-card">
+                    <div class="stat-value">{current_balance}$</div>
+                    <div class="stat-label">Текущий баланс</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{len(history)}</div>
+                    <div class="stat-label">Всего игр</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{max(balances) if balances else 0}$</div>
+                    <div class="stat-label">Максимальный баланс</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{min(balances) if balances else 0}$</div>
+                    <div class="stat-label">Минимальный баланс</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{sum(balances) / len(balances) if balances else 0:.2f}$</div>
+                    <div class="stat-label">Средний баланс</div>
+                </div>
             </div>
         </div>
 
         <script>
-            var data = [{{
-                x: {changes},
+            // Подготавливаем данные с временными метками для лучшего отображения
+            var timestamps = {[f'"{point["timestamp"]}"' for point in history]};
+            var averageBalance = {sum(balances) / len(balances) if balances else 0:.2f};
+
+            var trace1 = {{
+                x: timestamps,
                 y: {balances},
                 type: 'scatter',
-                mode: 'lines+markers',
-                marker: {{ color: '#1f77b4', size: 4 }},
-                line: {{ width: 2 }},
-                name: 'Баланс'
-            }}];
-
-            var layout = {{
-                title: 'Динамика баланса Kazik Bank',
-                xaxis: {{ title: 'Количество игр в coinflip' }},
-                yaxis: {{ title: 'Баланс ($)' }},
-                hovermode: 'closest',
-                showlegend: false
+                mode: 'lines',
+                line: {{
+                    color: '#2E86AB',
+                    width: 2,
+                    shape: 'linear'
+                }},
+                name: 'Баланс',
+                hovertemplate: '<b>Время:</b> %{{x}}<br><b>Баланс:</b> %{{y}}$<extra></extra>',
+                connectgaps: false
             }};
 
-            Plotly.newPlot('plot', data, layout);
+            // Добавляем точки для маркеров (показываются только при сильном приближении)
+            var trace2 = {{
+                x: timestamps,
+                y: {balances},
+                type: 'scatter',
+                mode: 'markers',
+                marker: {{
+                    color: '#A23B72',
+                    size: 4,
+                    opacity: 0.7
+                }},
+                name: 'Точки',
+                hovertemplate: '<b>Время:</b> %{{x}}<br><b>Баланс:</b> %{{y}}$<extra></extra>',
+                visible: 'legendonly'
+            }};
+
+            // Линия среднего баланса
+            var trace3 = {{
+                x: timestamps,
+                y: Array(timestamps.length).fill(averageBalance),
+                type: 'scatter',
+                mode: 'lines',
+                line: {{
+                    color: '#FF6B35',
+                    width: 2,
+                    dash: 'dash'
+                }},
+                name: 'Средний баланс (' + averageBalance.toFixed(0) + '$)',
+                hovertemplate: '<b>Средний баланс:</b> ' + averageBalance.toFixed(0) + '$<extra></extra>',
+                opacity: 0.8
+            }};
+
+            var data = [trace1, trace2, trace3];
+
+            var layout = {{
+                title: {{
+                    text: 'Динамика баланса Kazik Bank',
+                    font: {{
+                        size: 20,
+                        color: '#2c3e50'
+                    }}
+                }},
+                xaxis: {{
+                    title: {{
+                        text: 'Время',
+                        font: {{ size: 14 }}
+                    }},
+                    type: 'category',
+                    tickangle: -45,
+                    tickfont: {{ size: 10 }},
+                    rangeslider: {{
+                        visible: true,
+                        thickness: 0.1,
+                        yaxis: {{
+                            rangemode: 'match'
+                        }}
+                    }},
+                    rangeselector: {{
+                        buttons: [
+                            {{
+                                count: 10,
+                                label: 'Последние 10',
+                                step: 'all',
+                                stepmode: 'backward'
+                            }},
+                            {{
+                                count: 50,
+                                label: 'Последние 50',
+                                step: 'all',
+                                stepmode: 'backward'
+                            }},
+                            {{
+                                count: 100,
+                                label: 'Последние 100',
+                                step: 'all',
+                                stepmode: 'backward'
+                            }},
+                            {{ step: 'all', label: 'Все' }}
+                        ]
+                    }}
+                }},
+                yaxis: {{
+                    title: {{
+                        text: 'Баланс ($)',
+                        font: {{ size: 14 }}
+                    }},
+                    tickformat: '$,.0f',
+                    autorange: false,
+                    fixedrange: false,
+                    range: [{min(balances) if balances else 0}, {max(balances) if balances else 0}]
+                }},
+                hovermode: 'x unified',
+                showlegend: true,
+                legend: {{
+                    x: 0.02,
+                    y: 0.98,
+                    bgcolor: 'rgba(255,255,255,0.8)',
+                    bordercolor: 'rgba(0,0,0,0.2)',
+                    borderwidth: 1
+                }},
+                plot_bgcolor: 'rgba(248,249,250,0.8)',
+                paper_bgcolor: 'white',
+                margin: {{
+                    l: 80,
+                    r: 40,
+                    t: 80,
+                    b: 120
+                }},
+                height: 800
+            }};
+
+            var config = {{
+                displayModeBar: true,
+                displaylogo: false,
+                modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+                modeBarButtonsToAdd: [
+                    {{
+                        name: 'Показать точки',
+                        icon: Plotly.Icons.pencil,
+                        click: function(gd) {{
+                            var visible = gd.data[1].visible;
+                            if (visible === true || visible === undefined) {{
+                                Plotly.restyle(gd, 'visible', 'legendonly', [1]);
+                            }} else {{
+                                Plotly.restyle(gd, 'visible', true, [1]);
+                            }}
+                        }}
+                    }},
+                    {{
+                        name: 'Автомасштаб Y для видимой области',
+                        icon: {{
+                            'width': 857.1,
+                            'height': 1000,
+                            'path': 'm214 429h571v142h-571v-142z m571 286h-571v-143h571v143z m-571-429h571v143h-571v-143z',
+                            'transform': 'matrix(1 0 0 -1 0 850)'
+                        }},
+                        click: function(gd) {{
+                            var xRange = gd.layout.xaxis.range;
+                            if (xRange) {{
+                                var startIdx = Math.max(0, Math.floor(xRange[0]));
+                                var endIdx = Math.min(timestamps.length - 1, Math.ceil(xRange[1]));
+                                var visibleBalances = {balances}.slice(startIdx, endIdx + 1);
+
+                                if (visibleBalances.length > 0) {{
+                                    var minBalance = Math.min(...visibleBalances);
+                                    var maxBalance = Math.max(...visibleBalances);
+                                    var range = maxBalance - minBalance;
+                                    var padding = Math.max(range * 0.1, 50);
+
+                                    Plotly.relayout(gd, {{
+                                        'yaxis.range': [minBalance - padding, maxBalance + padding]
+                                    }});
+                                }}
+                            }}
+                        }}
+                    }}
+                ],
+                scrollZoom: true,
+                doubleClick: 'reset+autosize',
+                responsive: true
+            }};
+
+            Plotly.newPlot('plot', data, layout, config);
+
+            // Обработчик изменения масштаба для адаптивного отображения точек и масштабирования Y
+            document.getElementById('plot').on('plotly_relayout', function(eventdata) {{
+                var plot = document.getElementById('plot');
+
+                // Адаптивное масштабирование оси Y при изменении диапазона X
+                if (eventdata['xaxis.range[0]'] !== undefined && eventdata['xaxis.range[1]'] !== undefined) {{
+                    var startIdx = Math.max(0, Math.floor(eventdata['xaxis.range[0]']));
+                    var endIdx = Math.min(timestamps.length - 1, Math.ceil(eventdata['xaxis.range[1]']));
+
+                    // Находим мин и макс значения в видимом диапазоне
+                    var visibleBalances = {balances}.slice(startIdx, endIdx + 1);
+                    if (visibleBalances.length > 0) {{
+                        var minBalance = Math.min(...visibleBalances);
+                        var maxBalance = Math.max(...visibleBalances);
+
+                        // Добавляем небольшой отступ для лучшей визуализации
+                        var range = maxBalance - minBalance;
+                        var padding = range * 0.1; // 10% отступ
+
+                        // Если диапазон очень маленький, устанавливаем минимальный отступ
+                        if (range < 100) {{
+                            padding = 50;
+                        }}
+
+                        var newMin = minBalance - padding;
+                        var newMax = maxBalance + padding;
+
+                        // Обновляем диапазон оси Y
+                        Plotly.relayout(plot, {{
+                            'yaxis.range': [newMin, newMax],
+                            'yaxis.autorange': false
+                        }});
+                    }}
+
+                    // Показываем точки при сильном приближении
+                    var totalRange = timestamps.length;
+                    var visibleRange = endIdx - startIdx;
+                    if (visibleRange < totalRange * 0.15) {{
+                        Plotly.restyle('plot', 'visible', true, [1]);
+                    }} else {{
+                        Plotly.restyle('plot', 'visible', 'legendonly', [1]);
+                    }}
+                }}
+
+                // Сброс к полному диапазону при двойном клике или кнопке "Все"
+                if (eventdata['xaxis.autorange'] === true || eventdata['yaxis.autorange'] === true) {{
+                    Plotly.relayout(plot, {{
+                        'yaxis.range': [{min(balances) if balances else 0}, {max(balances) if balances else 0}],
+                        'yaxis.autorange': false
+                    }});
+                }}
+            }});
+
+            // Обработчик для кнопки "Автомасштаб Y"
+            document.getElementById('plot').on('plotly_doubleclick', function() {{
+                var plot = document.getElementById('plot');
+                setTimeout(function() {{
+                    var xRange = plot.layout.xaxis.range;
+                    if (xRange) {{
+                        var startIdx = Math.max(0, Math.floor(xRange[0]));
+                        var endIdx = Math.min(timestamps.length - 1, Math.ceil(xRange[1]));
+                        var visibleBalances = {balances}.slice(startIdx, endIdx + 1);
+
+                        if (visibleBalances.length > 0) {{
+                            var minBalance = Math.min(...visibleBalances);
+                            var maxBalance = Math.max(...visibleBalances);
+                            var range = maxBalance - minBalance;
+                            var padding = Math.max(range * 0.1, 50);
+
+                            Plotly.relayout(plot, {{
+                                'yaxis.range': [minBalance - padding, maxBalance + padding]
+                            }});
+                        }}
+                    }}
+                }}, 100);
+            }});
         </script>
     </body>
     </html>
     """
-
     # Сохраняем HTML во временный файл
     html_file = "kazik_stat.html"
     with open(html_file, 'w', encoding='utf-8') as f:
