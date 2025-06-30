@@ -26,11 +26,11 @@ RiverTTT2 = ("1 1 Fish_🐟", "3 2 Salmon_🐟")
 RiverTTT3 = ("3 2 Salmon_🐟","10 5 Cod_🦈")
 RiverTTT4 = ("10 5 Cod_🦈","40 10 Tropical_Fish_🐠")
 
-ChestT1 = ("10 10 Uncommon_chest💎")
-ChestT2 = ("50 50 Common_chest💎")
-ChestT3 = ("500 50 Rare_chest💎")
-ChestT4 = ("1000 100 Epic_chest💎")
-ChestT5 = ("2000 200 Legendary_chest👑")
+ChestT1 = ("50 10 Uncommon_chest💎")
+ChestT2 = ("100 50 Common_chest💎")
+ChestT3 = ("800 50 Rare_chest💎")
+ChestT4 = ("3500 100 Epic_chest💎")
+ChestT5 = ("6000 200 Legendary_chest👑")
 
 
 T1 = (RiverT1,RiverTT1,RiverTTT1)

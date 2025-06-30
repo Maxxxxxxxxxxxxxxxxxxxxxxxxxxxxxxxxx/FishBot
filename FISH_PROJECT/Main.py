@@ -960,7 +960,7 @@ def calculate_level(xp):
 
 def get_level_color(level):
     """Get color symbol based on level"""
-    colors = ['🟤', '🟣', '🔵', '🟢', '🟡', '🟠', '🔴', '⚪', '⚫','🔘','⭕','☢']
+    colors = ['🟤', '🟣', '🔵', '🟢', '🟡', '🟠', '🔴', '⚪', '⚫','🔘','⭕','☢','⚜']
     if level < 10:
         return colors[0]
     elif level < 20:
@@ -985,7 +985,8 @@ def get_level_color(level):
         return colors[10]
     elif level < 666:
         return colors[11]
-
+    elif level >= 666:
+        return colors[12]
 
 def get_xp_for_next_level(current_level):
     """Calculate XP needed for next level"""
