@@ -3,7 +3,7 @@
         "Empty": 0,
         "Worms": 14,
         "Leeches": 28,
-        "Magnet": 15
+        "Magnet": 26
     },
     "2048376052": {
         "Empty": 0,
@@ -56,6 +56,12 @@
     "786323726": {
         "Empty": 0,
         "Worms": 10,
+        "Leeches": 0,
+        "Magnet": 0
+    },
+    "653801390": {
+        "Empty": 0,
+        "Worms": 0,
         "Leeches": 0,
         "Magnet": 0
     }
